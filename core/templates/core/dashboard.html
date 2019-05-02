@@ -1,0 +1,40 @@
+{% extends 'core/base.html' %}
+{% block content %}
+    <h1 class="mt-5">รายงานคำขอลางานของฉัน</h1>
+    <hr>
+    <p>Welcome <span class="badge badge-secondary">{{ user }}</span></p>
+    <div>
+        {% if user.is_authenticated %}
+            <a href="{% url 'request' %}" class="btn btn-primary">กรอกแบบฟอร์ม</a>
+            <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+        {% endif %}
+    </div>
+    <br>
+    <table class="table">
+        <tr>
+            <td>ประเภท</td>
+            <td>สาเหตุ</td>
+            <td>ตั้งแต่วันที่</td>
+            <td>ถึงวันที่</td>
+            <td>สถานะ</td>
+        </tr>
+        {% for off in dayoff %}
+            <tr>
+                <td>{{ off.get_type_display }}</td>
+                <td>{{ off.reason }}</td>
+                <td>{{ off.date_start }}</td>
+                <td>{{ off.end_date }}</td>
+                <td>
+                    {#                {{ off.approve_status }}#}
+                    {% if off.approve_status == '01' %}
+                        <span class="badge badge-secondary">{{ off.get_approve_status_display }}</span>
+                    {% elif off.approve_status == '02' %}
+                        <span class="badge badge-danger">{{ off.get_approve_status_display }}</span>
+                    {% elif off.approve_status == '03' %}
+                        <span class="badge badge-success">{{ off.get_approve_status_display }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
